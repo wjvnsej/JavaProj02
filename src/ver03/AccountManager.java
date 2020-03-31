@@ -187,8 +187,10 @@ public class AccountManager {
 						switch (selectAllMoney) {
 						case "YES":
 							accounts[i].balance = 0;
+							System.out.println("잔고 전체 출금 완료!");							
 							break;
 						case "NO":
+							System.out.println("출금을 취소합니다.");
 							return;
 						}
 					}

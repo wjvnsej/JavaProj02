@@ -22,6 +22,7 @@ public class AccountManager {
 			
 		} 
 		catch (Exception e) {
+			System.out.println("불러올 파일이 없습니다.\n계좌를 생성해주세요.\n");
 			set = new HashSet<Object>();
 		}
 	}
@@ -132,7 +133,6 @@ public class AccountManager {
 		accountNum = scan.nextLine();
 		
 		checkAccNum(accountNum);
-		
 		System.out.println("이름 : " );
 		name = scan.nextLine();
 		

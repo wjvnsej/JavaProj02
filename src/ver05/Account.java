@@ -258,27 +258,36 @@ public class Account {
 		}
 	}
 	
+	//퍼즐게임
 	public void puz_game() {
 		while (true) {
-			Puzle puzle = new Puzle(4100);
+			Puzle puzle = new Puzle(7);
 			puzle.start();
 
 			Scanner scan = new Scanner(System.in);
+			if (Objects.deepEquals(puzle.puz, puzle.PUZ_ORIGIN)) {
+				System.out.println("정답입니다!!");
+			}
+			puzle.showpuz();
 			System.out.println("재시작하시겠습니까?(y 누르면 재시작, 나머지는 종료.)");
 			String reStart = scan.nextLine();
 			if(reStart.equals("y")) {
 				puzle.start();
 			}
 			else {
-				System.exit(0);
+				System.out.println("게임을 종료합니다.");
+				return;
 			}
 		}
 	}
 }
+//
 interface puzVal {
+	//퍼즐의 배열 인터페이스화
 	String ONE = "1", TWO = "2", THREE = "3", FOUR = "4", FIVE = "5",
 			SIX = "6", SEVEN = "7", EIGHT = "8", X = "X"; 
 	
+	//정답을 확인하기 위한 기본 퍼즐배열 인터페이스화
 	String [][] PUZ_ORIGIN = {
 			{ONE, TWO, THREE},
 			{FOUR, FIVE, SIX},
@@ -287,21 +296,28 @@ interface puzVal {
 }
 
 class Puzle implements puzVal {
+	//X의 기본값
 	int i = 2, j = 2;
+	//X와 위치를 변경 할 퍼즐이 담길 변수
 	String Change;
+	//실제 게임에 사용 될 퍼즐
 	String [][] puz = {
 			{ONE, TWO, THREE},
 			{FOUR, FIVE, SIX},
 			{SEVEN, EIGHT, X}
 	};
 	
+	//생성자로 퍼즐 셔플
 	public Puzle(int num) {
+		//셔플 될 횟수
 		int shu_num = 0;
 		while (shu_num < num) {
+			//1~4까지의 랜덤 정수 생성
 			int rnd = (int)(Math.random() * 4)+1;
 			switch (rnd) {
 			//up
 			case 1:
+				//퍼즐이 위로 움직이지 못할 경우 down() 호출
 				if(i == 2) {
 					down();
 					break;
@@ -312,6 +328,7 @@ class Puzle implements puzVal {
 				break;
 			//down
 			case 2:
+				//퍼즐이 아래로 움직이지 못할 경우 up() 호출
 				if(i == 0) {
 					up();
 					break;
@@ -322,6 +339,7 @@ class Puzle implements puzVal {
 				break;
 			//left
 			case 3:
+				//퍼즐이 왼쪽으로 움직이지 못할 경우 right() 호출
 				if(j == 2) {
 					right();
 					break;
@@ -332,6 +350,7 @@ class Puzle implements puzVal {
 				break;
 			//right
 			case 4:
+				//퍼즐이 오른쪽으로 움직이지 못할 경우 left() 호출
 				if(j == 0) {
 					left();
 					break;
@@ -343,8 +362,11 @@ class Puzle implements puzVal {
 			}
 			shu_num ++;
 		}
+		//셔플 후 게임 시작.
+		System.out.println("**퍼즐게임을 시작합니다.**");
 	}
 	
+	//게임에 사용되는 퍼즐을 보여주기 위한 함수
 	public void showpuz() {
 		System.out.println("--------");
 		for(int i=0;i<puz.length;i++) {
@@ -356,9 +378,13 @@ class Puzle implements puzVal {
 		System.out.println("--------");
 	}
 	
+	//퍼즐게임 진행을 위한 함수
 	public void start() {
 		Scanner scan = new Scanner(System.in);
-		System.out.println("**퍼즐게임을 시작합니다.**");
+		
+		/*Objects.deepEquals()함수를 사용하여 
+		셔플된 퍼즐과 기본 퍼즐의 데이터가 맞는지 확인		
+		 */
 		while(!(Objects.deepEquals(puz, PUZ_ORIGIN))) {
 			showpuz();
 			System.out.println
@@ -381,18 +407,15 @@ class Puzle implements puzVal {
 				right();
 				break;
 			case "x":
-				System.out.println("프로그램을 종료합니다.");
+				System.out.println("게임을 종료합니다.");
 				return;
 			}
-			
 		}
-		System.out.println("정답입니다!!");
-		showpuz();
-		
 	}
 	
+	//퍼즐을 위로 이동시키기 위한 함수
 	public void up() {
-					
+		//j의 값과는 상관없이 i의 값이 2이면 위로 움직일 수 없기 때문에 메세지 출력
 		if(puz[2][j] == X){
 			System.out.println("위로 움직일 수 없습니다.");
 			return;
@@ -403,7 +426,9 @@ class Puzle implements puzVal {
 		return;
 	}
 	
+	//퍼즐을 아래로 이동시키기 위한 함수
 	public void down() {
+		//j의 값과는 상관없이 i의 값이 0이면 아래로 움직일 수 없기 때문에 메세지 출력
 		if(puz[0][j] == X){
 			System.out.println("아래로 움직일 수 없습니다.");
 			return;
@@ -413,7 +438,10 @@ class Puzle implements puzVal {
 		puz[--i][j] = X;
 		return;
 	}
+	
+	//퍼즐을 왼쪽으로 이동시키기 위한 함수
 	public void left() {
+		//i의 값과는 상관없이 j의 값이 2이면 왼쪽로 움직일 수 없기 때문에 메세지 출력
 		if(puz[i][2] == X){
 			System.out.println("왼쪽으로 움직일 수 없습니다.");
 			return;
@@ -423,7 +451,10 @@ class Puzle implements puzVal {
 		puz[i][++j] = X;
 		return;
 	}
+	
+	//퍼즐을 오른쪽로 이동시키기 위한 함수
 	public void right() {
+		//i의 값과는 상관없이 j의 값이 0이면 오른쪽로 움직일 수 없기 때문에 메세지 출력
 		if(puz[i][0] == X){
 			System.out.println("오른쪽으로 움직일 수 없습니다.");
 			return;
