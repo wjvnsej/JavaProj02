@@ -196,7 +196,7 @@ public class AccountManager {
 					}
 					else {
 						accounts[i].balance -= outputMoney;
-					
+						
 						System.out.println("출금이 완료되었습니다.\n");
 					}
 				}
